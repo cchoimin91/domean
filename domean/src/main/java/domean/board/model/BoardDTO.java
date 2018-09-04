@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 public class BoardDTO {
-	 
+	  
 	private String boardSeq;
 	private String boardTitle;
 	private String boardContent;
