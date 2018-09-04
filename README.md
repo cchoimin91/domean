@@ -1,7 +1,9 @@
 # domean
 토이프로젝트
 
-Spring MVC 게시판 입니다.
+Spring MVC 게시판 입니다.  
+DDL은 database_ddl파일에 포함되어 있습니다.  
+
 
 ***
   
