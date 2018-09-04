@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+	
+
+	<insert id="insertBoard" parameterType="domean.board.model.BoardDTO">
+		<selectKey order="BEFORE" keyProperty="boardSeq" resultType="String">
+			SELECT IFNULL( MAX(BOARD_SEQ)+1, 1) FROM BOARD
+		</selectKey> 
+		INSERT INTO BOARD(BOARD_TITLE, BOARD_CONTENT, BOARD_WRITERSEQ, BOARD_WRITE_DATE, BOARD_UPDATE_DATE, BOARD_UPDATE_MEMBERSEQ, BOARD_DELETEFLAG)
+		
+		VALUES(#{boardTitle}, #{boardContent}, #{boardWriterSeq}, DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s')
+				, #{boardUpdateMemberSeq}, 'N')
+	</insert>	
+
+	<insert id="insertBoardFile" parameterType="domean.common.FileVO">
+	<!-- <selectKey order="BEFORE" keyProperty="fileSeq" resultType="String">
+			SELECT IFNULL( MAX(FILE_SEQ)+1, 1) FROM FILE
+		</selectKey> -->
+		INSERT INTO FILE(FILE_BOARDSEQ, FILE_ORIGINAL_NAME, FILE_NAME, FILE_SIZE, FILE_DELETEFLAG)
+		
+		VALUES(#{parentPK}, #{fileOriginalName}, #{fileName},#{fileSize}, 'N')
+	</insert>
+	
+	<select id="totalCountBoard" parameterType="domean.common.SearchVO"  resultType="Integer">
+		SELECT COUNT(*) 
+		FROM BOARD B
+		<include refid="includBoardList"/>
+	</select>
+	
+	<select id="listBoard" parameterType="domean.common.SearchVO" resultType="domean.board.model.BoardDTO">
+		SELECT S2.ROWNUM, S2.BOARD_SEQ, S2.BOARD_TITLE, S2.MEMBER_NAME, DATE_FORMAT(S2.BOARD_WRITE_DATE, '%Y.%m.%d %H:%i:%s') BOARD_WRITE_DATE
+		 FROM(
+				SELECT *
+				FROM (
+						SELECT @NO := @NO + 1 AS ROWNUM,  S1.BOARD_SEQ, S1.BOARD_TITLE,S1.BOARD_WRITE_DATE, S1.BOARD_WRITERSEQ, S1.MEMBER_NAME
+						FROM(
+		    					SELECT BOARD_SEQ, BOARD_TITLE, BOARD_CONTENT, BOARD_WRITERSEQ, BOARD_WRITE_DATE, BOARD_UPDATE_DATE
+										, BOARD_UPDATE_MEMBERSEQ, BOARD_DELETEFLAG, M.MEMBER_NAME
+		    					FROM BOARD B
+		    					<include refid="includBoardList"/>
+		    					ORDER BY BOARD_WRITE_DATE DESC
+		  					) S1 ,(SELECT @NO := 0 ) SUB 
+						
+						WHERE @NO &lt;= #{endRow}
+				     ) S1
+		    ) S2
+		WHERE S2.ROWNUM &gt;=#{startRow}
+		ORDER BY S2.BOARD_WRITE_DATE DESC
+	</select>
+	
+	<sql id="includBoardList">
+		INNER JOIN MEMBER M ON M.MEMBER_SEQ=B.BOARD_WRITERSEQ
+		WHERE BOARD_DELETEFLAG='N'
+		<if test="searchKeyword!=null and searchKeyword!=''">
+			AND ${searchType} LIKE CONCAT('%', #{searchKeyword}, '%')
+	 	</if>
+	</sql>
+		
+	<select id="selectOneBoard" parameterType="String" resultType="domean.board.model.BoardDTO">
+		SELECT BOARD_SEQ,BOARD_TITLE,BOARD_CONTENT, BOARD_WRITERSEQ, BOARD_WRITE_DATE, BOARD_UPDATE_DATE, BOARD_UPDATE_MEMBERSEQ, BOARD_DELETEFLAG, M.MEMBER_NAME
+		FROM BOARD B
+		INNER JOIN MEMBER M ON M.MEMBER_SEQ = B.BOARD_WRITERSEQ 
+		WHERE BOARD_SEQ=#{boardSeq} AND BOARD_DELETEFLAG='N'
+	</select>
+	
+	<select id="selectAllBoardFile" parameterType="String" resultType="domean.common.FileVO">
+		SELECT FILE_SEQ, FILE_BOARDSEQ, FILE_ORIGINAL_NAME, FILE_NAME,FILE_SIZE, FILE_DELETEFLAG 
+		FROM FILE
+		WHERE FILE_BOARDSEQ=#{boardSeq} AND FILE_DELETEFLAG='N'
+	</select>
+	
+</mapper>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.springframework.org/schema/beans"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:cache="http://www.springframework.org/schema/cache"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    					http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                        http://www.springframework.org/schema/context
+                        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+                        http://www.springframework.org/schema/mvc
+                        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                        http://www.springframework.org/schema/cache 
+                        http://www.springframework.org/schema/cache/spring-cache.xsd
+                        http://www.springframework.org/schema/security 
+						http://www.springframework.org/schema/security/spring-security.xsd  
+            			http://www.springframework.org/schema/tx 
+            			http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+                        ">
+                         
+
+
+		
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	
+	<!-- Enables the Spring MVC @Controller programming model -->
+
+
+
+
+
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<!-- <resources mapping="/resource/**" location="/resources/"/> -->
+	<mvc:resources mapping="/resources/**" location="/resources/"/>
+	<mvc:resources mapping="/js/**" location="/js/" />
+	<mvc:resources mapping="/css/**" location="/css/" />
+	<mvc:resources mapping="/imgages/**" location="/imgages/" />
+
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	  <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	<!-- MultipartResolver 설정 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="100000000" />
+        <property name="maxInMemorySize" value="100000000" />
+    </bean>
+
+	 <tx:annotation-driven transaction-manager="transactionManager"/>
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+	<!-- application.properties 설정 --> 
+<!--<context:property-placeholder location="classpath:/application.properties" /> 
+		
+		<bean id="connectionFactoryLocator" class="org.springframework.social.connect.support.ConnectionFactoryRegistry"> 
+			<property name="connectionFactories"> 
+				<bean class="org.springframework.social.facebook.connect.FacebookConnectionFactory"> 
+					<constructor-arg value="${spring.social.facebook.appId}" /> 
+					<constructor-arg value="${spring.social.facebook.appSecret}" />
+				 </bean>
+			</property>
+		</bean>
+		   
+		<bean id="inMemoryConnectionRepository" class="org.springframework.social.connect.mem.InMemoryConnectionRepository"> 
+	    	 <constructor-arg ref="connectionFactoryLocator" />
+	    </bean> -->
+
+	
+	<context:annotation-config/>
+    <context:component-scan base-package="domean"/> 
+    
+	<mvc:annotation-driven />
+	<mvc:default-servlet-handler />
+	
+</beans>

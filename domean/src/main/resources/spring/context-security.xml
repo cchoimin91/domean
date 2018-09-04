@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+ xmlns:beans="http://www.springframework.org/schema/beans" 
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+ xmlns:context="http://www.springframework.org/schema/context"
+ xsi:schemaLocation=
+					 " 	http://www.springframework.org/schema/beans 
+					 	http://www.springframework.org/schema/beans/spring-beans.xsd 
+					 	http://www.springframework.org/schema/security 
+					 	http://www.springframework.org/schema/security/spring-security.xsd 
+					    http://www.springframework.org/schema/context
+					    http://www.springframework.org/schema/context/spring-context-3.2.xsd "
+ > 
+ 	<!-- <beans:bean id="FacebookAuthenticationFilter" class="domean.login.FacebookAuthenticationFilter"/>  -->
+  	
+  		
+	<!--css,js,img등의 리소스에 대해서 접근 허용 유무-->
+	<http pattern="/resources/**"  security="none" />
+	
+	<!-- 스프링시큐리티 표현식 사용 여부 -->
+	<http auto-config="true" use-expressions="true" > 
+		
+		<intercept-url pattern="/newmember/insert"  access="isAnonymous()" />
+	    <intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/> 
+		<intercept-url pattern="/member/**" access="hasAnyRole('ROLE_ADMIN','ROLE_USER')" /> 
+		<intercept-url pattern="/downloadFile" access="hasAnyRole('ROLE_ADMIN','ROLE_USER')" /> 
+		<intercept-url pattern="/downloadPhoto" access="hasAnyRole('ROLE_ADMIN','ROLE_USER')" /> 
+		<intercept-url pattern="/index"  access="isAnonymous()" />
+		<intercept-url pattern="/login"  access="isAnonymous()" /> 
+		<intercept-url pattern="/facebooklogin"  access="permitAll()" />	
+
+		 <form-login
+		 		 login-processing-url="/logincheck"
+				 username-parameter="memberId"
+				 password-parameter="memberPw"
+				 login-page="/index"
+				 authentication-success-handler-ref="LoginSuccessHandler"
+	  			 authentication-failure-handler-ref="LoginFailureHandler"
+		/>
+		<logout
+			     logout-url="/logout"
+				 logout-success-url="/index"
+				 invalidate-session="true"
+	  	/>
+  			
+  		  <!-- 세션이 끊겼을때 이동할 페이지 -->
+  		  <session-management invalid-session-url="/index"> 
+  		    <!-- 1번 접속자 유지 -->
+       		<!-- <concurrency-control max-sessions="1" error-if-maximum-exceeded="true" /> -->
+       		
+       		<!-- 중복 로그인 일어 났을 시 이동 할 주소 -->
+       	    <concurrency-control max-sessions="1" expired-url="/index" /> 
+  		  </session-management>
+  		  
+  		  <!-- 권한없음 강제이동페이지 -->
+  		  <access-denied-handler error-page="/accessdenied"/>
+  		  
+  	 	<!--  <custom-filter after="FORM_LOGIN_FILTER"  ref="FacebookAuthenticationFilter" /> -->  
+	</http>
+
+
+	<authentication-manager alias="authenticationManager">
+  		<authentication-provider ref="SecurityAuthenticationProvider"> </authentication-provider>
+  
+  		<authentication-provider user-service-ref="SecurityUserDetailsService">
+  		   <password-encoder ref="passwordEncorder"></password-encoder>
+  		</authentication-provider>
+	</authentication-manager>
+
+
+
+
+
+	<beans:bean id="SecurityUserDetailsService" class="domean.security.service.SecurityUserDetailsService"/> 
+	<beans:bean id="SecurityAuthenticationProvider" class="domean.security.controller.SecurityAuthenticationProvider" />
+	<beans:bean id="LoginSuccessHandler" class="domean.security.hendler.LoginSuccessHandler"/>
+	<beans:bean id="LoginFailureHandler" class="domean.security.hendler.LoginFailureHandler"/>
+  	<beans:bean id="passwordEncorder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+  	<!-- <beans:bean id="SocialConfig" class="domean.login.SocialConfig"/> -->
+	
+
+
+    
+    
+    <authentication-manager alias="authenticationManager">
+  		<authentication-provider ref="SecurityAuthenticationProvider"> </authentication-provider>
+  
+  		<authentication-provider user-service-ref="SecurityUserDetailsService">
+  		   <password-encoder ref="passwordEncorder"></password-encoder>
+  		</authentication-provider>
+	</authentication-manager>
+    
+    
+    
+	 
+	
+	
+ 	<context:component-scan base-package="domean"/> 
+</beans:beans>

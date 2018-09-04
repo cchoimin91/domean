@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="member">
+	
+	
+	<select id="selectMemberBasicInfo" resultType="domean.member.model.MemberDTO"  parameterType="String">
+  	   SELECT MEMBER_SEQ, MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_DELETEFLAG
+  	   FROM MEMBER 
+       WHERE MEMBER_ID=#{memberId} 
+    </select>
+
+    
+    <select id="selectAllMemberAuthority" resultType="domean.member.model.RoleDTO" parameterType="String">
+    	SELECT MEMBER_AUTHORITY
+		FROM MEMBER_AUTH
+		WHERE MEMBER_SEQ=#{memberSeq}
+    </select>
+
+
+	<insert id="insertJoinMember" parameterType="domean.member.model.MemberDTO">
+		<!-- <selectKey resultType="String" keyProperty="memberSeq" order="BEFORE">
+    		SELECT IFNULL( MAX(MEMBER_SEQ)+1, 1) FROM MEMBER
+    	</selectKey> -->
+		INSERT INTO 
+		MEMBER(MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_DELETEFLAG) 
+		VALUES(#{memberId}, #{memberPw}, #{memberName}, 'N')
+	</insert>
+	
+	
+	<select id="selectOneMemberSeq" resultType="String"  parameterType="domean.member.model.MemberDTO">
+  	   SELECT MEMBER_SEQ
+  	   FROM MEMBER 
+       WHERE MEMBER_ID=#{memberId} 
+    </select>
+	
+	
+	<insert id="insertJoinMemberAuth" parameterType="INTEGER" >
+		INSERT INTO 
+		MEMBER_AUTH(MEMBER_SEQ,MEMBER_AUTHORITY) 
+		VALUES(#{memberSeq},'ROLE_USER')
+	</insert>
+    
+    
+	
+</mapper>
