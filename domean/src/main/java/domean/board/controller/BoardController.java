@@ -24,7 +24,6 @@ import domean.member.model.MemberDTO;
 
 @Controller
 public class BoardController {
-	//테스트
 	
 	@Autowired
 	BoardService boardService;
