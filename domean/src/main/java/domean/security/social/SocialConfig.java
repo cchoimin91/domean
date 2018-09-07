@@ -50,7 +50,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 	public class SocialConfig
 	{/*
 	    public static final String APPID ="507921746273443";
-	    public static final String APPSECRET ="027f445fa68499e477461748b95c0130";
+	    public static final String APPSECRET ="";
 	
 	    
 	    
