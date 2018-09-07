@@ -56,7 +56,7 @@
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                         <form id="f1" name="f1" method="post">
-                        	<a href="/member/board/insert" class="btn btn-primary" style="float:right">글등록</a>
+                        	<a href="/member/board/create" class="btn btn-primary" style="float:right">글등록</a>
                         	<jsp:include page="../common/search.jsp"/>
                             <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                             	<colgroup>

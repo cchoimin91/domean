@@ -5,15 +5,19 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import domean.member.controller.MemberController;
+import domean.util.DateUtil;
+import domean.util.PropertiesUtil;
 
 
-
-public class FileService {
+/**
+ * 파일 업로드 클래스
+ * @author CM
+ *
+ */
+public class FileUpload {
 	
 	
 	/**
@@ -58,7 +62,7 @@ public class FileService {
 	 * @throws Exception 오류발생 처리
 	 */
 	public FileVO SaveOneFile(MultipartFile upfile, String type) throws Exception {
-		String filePath = CommUtil.getOption("domean", "upload.file");
+		String filePath = PropertiesUtil.getOption("domean", "upload.file");
 		String newFileName = getNewName();
 		
 		saveFile(upfile, filePath+"/"+DateUtil.getCurrentTime("yyyy")+"/", newFileName);
@@ -82,7 +86,7 @@ public class FileService {
 	 * @throws Exception 오류발생 처리
 	 */
 	public List<FileVO> SaveAllFiles(List<MultipartFile> upfiles) throws Exception {
-		String filePath = CommUtil.getOption("domean", "upload.file");
+		String filePath = PropertiesUtil.getOption("domean", "upload.file");
 		List<FileVO> filelist = new ArrayList<FileVO>();
 
 		for(MultipartFile uploadfile : upfiles ){			
@@ -126,7 +130,7 @@ public class FileService {
 	 * @throws Exception 오류발생
 	 */
 	public Boolean isExtension(List<MultipartFile> upfiles) throws Exception {
-		String allowFiles = CommUtil.getOption("domean", "ALLOW_FILE");
+		String allowFiles = PropertiesUtil.getOption("domean", "ALLOW_FILE");
 		
 		for(MultipartFile uploadfile : upfiles ){
 			if (uploadfile.getSize()==0){

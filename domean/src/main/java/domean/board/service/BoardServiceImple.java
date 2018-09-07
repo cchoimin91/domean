@@ -10,10 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import domean.board.dao.BoardDAO;
 import domean.board.model.BoardDTO;
-import domean.common.FileService;
+import domean.common.FileUpload;
 import domean.common.FileVO;
 import domean.common.SearchVO;
-import domean.member.dao.MemberDAO;
 
 @Service("BoardServiceImple")
 public class BoardServiceImple implements BoardService{
@@ -41,7 +40,7 @@ public class BoardServiceImple implements BoardService{
 		
 		List<FileVO> fileList =  new ArrayList<FileVO>();
 		if(boardDTO.getUploadFile()!=null) {
-			fileList = new FileService().SaveAllFiles(boardDTO.getUploadFile());
+			fileList = new FileUpload().SaveAllFiles(boardDTO.getUploadFile());
 		}
 		
 		for (Integer i=0; i<fileList.size();i++) {					

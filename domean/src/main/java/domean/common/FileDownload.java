@@ -11,18 +11,24 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import domean.util.PropertiesUtil;
 
+/**
+ * 파일다운로드 클래스
+ * @author CM
+ *
+ */
 @Controller
-public class downloadFile{
+public class FileDownload{
 
 	@RequestMapping(value = "downloadFile")
 	public void execDownloadFile(HttpServletRequest request,HttpServletResponse response) throws Exception {
-		filedownload( CommUtil.getOption("domean", "upload.image"), request, response );
+		filedownload( PropertiesUtil.getOption("domean", "upload.image"), request, response );
 	}
 	
 	@RequestMapping(value = "downloadPhoto")
 	public void downloadPhoto(HttpServletRequest request,HttpServletResponse response) throws Exception {
-		filedownload( CommUtil.getOption("domean", "upload.image"), request, response );
+		filedownload( PropertiesUtil.getOption("domean", "upload.image"), request, response );
 	}
 	
 	/**

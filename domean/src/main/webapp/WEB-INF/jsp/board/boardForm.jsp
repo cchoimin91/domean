@@ -79,7 +79,7 @@
                 </div>
             </div>
             
-            <form id="f1" name="f1" action="/member/board" enctype="multipart/form-data" method="post">
+            <form id="f1" name="f1" action="/member/board/create" enctype="multipart/form-data" method="post">
 	           	<div class="form-group">
 	            	<label>글제목</label>
 	                <input class="form-control"  id="boardTitle" name="boardTitle" placeholder="글제목" value="<c:out value="${boardDTO.boardTitle}"/>"/>

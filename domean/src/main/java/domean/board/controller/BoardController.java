@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.catalina.connector.Request;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import domean.board.dao.BoardDAO;
 import domean.board.model.BoardDTO;
 import domean.board.service.BoardService;
 import domean.common.FileVO;
@@ -33,7 +30,7 @@ public class BoardController {
 	 * 게시물 등록 폼으로 이동합니다.
 	 * @return
 	 */
-	@RequestMapping(value = "member/board/insert" , method = RequestMethod.GET )
+	@RequestMapping(value = "member/board/create" , method = RequestMethod.GET )
 	public String boardWriteView() {
 		return "board/boardForm";
 	}
@@ -72,7 +69,7 @@ public class BoardController {
 	 * @return 리스트페이지
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "member/board/insert", method = RequestMethod.POST)
+	@RequestMapping(value = "member/board/create", method = RequestMethod.POST)
 	public String boardInsert(HttpServletRequest request, ModelMap modelMap, @ModelAttribute BoardDTO boardDTO, Authentication authentication) throws Exception {
 		
 		MemberDTO memberDTO = (MemberDTO) authentication.getPrincipal();
@@ -84,7 +81,7 @@ public class BoardController {
 	
 	
 	/**
-	 * 게시물 1건 조회
+	 * 게시물 1건을 조회합니다.
 	 * @param request
 	 * @param modelMap
 	 * @param boardDTO
@@ -106,6 +103,16 @@ public class BoardController {
 	}
 	
 	
+	
+	/**
+	 * 수정 할 게시물의 데이터를 가져옵니다.
+	 * @param request
+	 * @param authentication
+	 * @param boardSeq
+	 * @param modelMap
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value="member/board/update/{boardSeq}", method = RequestMethod.GET)
 	public String boardUpdateForm(HttpServletRequest request, Authentication authentication, @PathVariable("boardSeq") String boardSeq, ModelMap modelMap) throws Exception {
 		
