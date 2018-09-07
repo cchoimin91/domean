@@ -38,8 +38,8 @@
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="core.log.jdbc.driver.MysqlDriver"/>
         <property name="url" value="jdbc:mysql://127.0.0.1:3306/domean?allowMultiQueries=true"/>
-        <property name="username" value=""/>
-        <property name="password" value=""/>
+        <property name="username" value="root"/>
+        <property name="password" value="choimin"/>
     </bean>
     
     
