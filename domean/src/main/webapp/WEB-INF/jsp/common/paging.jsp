@@ -6,25 +6,25 @@
 <c:if test="${searchVO.totPage>1}">
         <div> 
 		<c:if test="${searchVO.page>1}">
-			<a href="javascript:formSubmit(1);">[처음]</a>
-			<a href="javascript:formSubmit(${searchVO.page-1});">[이전]</a>
+			<a href="javascript:pasingFormSubmit(1);">[처음]</a>
+			<a href="javascript:pasingFormSubmit(${searchVO.page-1});">[이전]</a>
 		</c:if>
 		<span class="num">
 			<c:forEach var="i" begin="${searchVO.sPage}" end="${searchVO.ePage}" step="1" varStatus="status">
 	            <c:choose>
 	                <c:when test="${i eq searchVO.page}">
-	                	<b><a href="javascript:formSubmit(${i})"><c:out value="${i}"/></a></b>
+	                	<b><a href="javascript:pasingFormSubmit(${i})"><c:out value="${i}"/></a></b>
 	                </c:when>
 	                <c:otherwise>
-	                	<a href="javascript:formSubmit(${i})"><c:out value="${i}"/></a>
+	                	<a href="javascript:pasingFormSubmit(${i})"><c:out value="${i}"/></a>
 	                </c:otherwise>
 	            </c:choose>
 	            <c:if test="${not status.last}">|</c:if>
 	        </c:forEach>
 		</span>		
 		<c:if test="${searchVO.totPage > searchVO.page}">
-			<a href="javascript:formSubmit(${searchVO.page+1});">[다음]</a>
-			<a href="javascript:formSubmit(${searchVO.totPage});">[마지막]</a>
+			<a href="javascript:pasingFormSubmit(${searchVO.page+1});">[다음]</a>
+			<a href="javascript:pasingFormSubmit(${searchVO.totPage});">[마지막]</a>
 		</c:if>
 		
 		</div>

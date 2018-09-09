@@ -36,6 +36,7 @@ public class BoardServiceImple implements BoardService{
 		
 		boardDTO.setBoardWriterSeq(memberSeq);
 		boardDTO.setBoardUpdateMemberSeq(memberSeq);
+		
 		boardDAO.insertBoard(boardDTO);
 		
 		List<FileVO> fileList =  new ArrayList<FileVO>();
@@ -51,10 +52,25 @@ public class BoardServiceImple implements BoardService{
 	}
 
 	
-
+	
+	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public void updateBoard() throws SQLException {
-		// TODO Auto-generated method stub
+	public void updateBoard(BoardDTO boardDTO, String memberSeq) throws Exception {
+		
+		boardDTO.setBoardUpdateMemberSeq(memberSeq);
+		boardDAO.updateBoard(boardDTO);
+		
+		List<FileVO> fileList =  new ArrayList<FileVO>();
+		
+		if(boardDTO.getUploadFile()!=null) {
+			fileList = new FileUpload().SaveAllFiles(boardDTO.getUploadFile());
+		}
+		
+		for (Integer i=0; i<fileList.size();i++) {					
+			FileVO fileVO = fileList.get(i);
+			fileVO.setParentPK(boardDTO.getBoardSeq());
+			boardDAO.insertBoardFile(fileVO);
+		}
 		
 	}
 

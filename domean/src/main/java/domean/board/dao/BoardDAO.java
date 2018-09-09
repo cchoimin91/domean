@@ -89,4 +89,14 @@ public class BoardDAO {
 	}
 	
 	
+	
+	/**
+	 * 게시물을 수정합니다. 
+	 * @param boardDTO
+	 * @throws SQLException
+	 */
+	public void updateBoard(BoardDTO boardDTO) throws SQLException{
+		sqlSession.update("updateBoard", boardDTO);
+	}
+	
 }

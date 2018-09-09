@@ -79,6 +79,29 @@ public class BoardController {
 	}
 	
 	
+	/**
+	 * 게시물을 수정합니다.
+	 * @param request
+	 * @param boardDTO
+	 * @param authentication
+	 * @return 리스트페이지
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "member/board/update", method = RequestMethod.PATCH)
+	public String boardUpdate(HttpServletRequest request, @ModelAttribute BoardDTO boardDTO, Authentication authentication) throws Exception {
+		
+		MemberDTO memberDTO = (MemberDTO) authentication.getPrincipal();
+		
+		if(!memberDTO.getMemberSeq().equals(boardDTO.getBoardWriterSeq())) {
+			return "etc/accessDenied";
+		}
+		
+		boardService.updateBoard(boardDTO, memberDTO.getMemberSeq());
+
+		return "redirect:/member/board/list";
+	}
+	
+	
 	
 	/**
 	 * 게시물 1건을 조회합니다.
@@ -99,13 +122,14 @@ public class BoardController {
 		modelMap.addAttribute("memberDTO",memberDTO);
 		modelMap.addAttribute("fileList",fileList);		
 		modelMap.addAttribute("boardDTO",boardDTO);
+		
 		return "board/boardView";
 	}
 	
 	
 	
 	/**
-	 * 수정 할 게시물의 데이터를 가져옵니다.
+	 * 수정 할 게시물의 데이터를 수정 폼으로 가져옵니다.
 	 * @param request
 	 * @param authentication
 	 * @param boardSeq
@@ -123,10 +147,30 @@ public class BoardController {
 			return "etc/accessDenied";
 		}
 		
-		modelMap.addAttribute("boardDTO", boardDTO);
+		List<FileVO> fileList= boardService.selectAllBoardFile(boardSeq);
 		
-		return "board/boardForm";
+		modelMap.addAttribute("boardDTO", boardDTO);
+		modelMap.addAttribute("fileList", fileList);
+		
+		return "board/boardUpdateForm";
 	}
+	
+	
+	
+	/**
+	 * 게시글을 삭제 합니다. 
+	 * @param request
+	 * @param boardSeq
+	 * @param authentication
+	 * @return
+	 */
+	@RequestMapping(value="member/board/delete", method= RequestMethod.DELETE)
+	public String boardDelete(HttpServletRequest request, @PathVariable("boardSeq") String boardSeq, Authentication authentication) {
+		
+		
+		return "redirect:board/boardList";
+	}
+	
 
 	
 	

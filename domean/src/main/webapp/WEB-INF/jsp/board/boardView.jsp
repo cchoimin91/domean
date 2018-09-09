@@ -33,6 +33,12 @@
 			} else
 				document.location.href = '/downloadFile?fileName='+ fileName + '&originalName=' + originalName;
 		}
+		
+		function deleteBoard(boardSeq){
+			if(confirm('정말 삭제하시겠습니까?')){
+				window.location.href='/member/board/delete?boardSeq='+boardSeq;
+			}
+		}
 	</script>
 </head>
 
@@ -57,6 +63,7 @@
             
             <c:if test="${principal_memberSeq eq boardDTO.boardWriterSeq}">
             	<a href="/member/board/update/${boardDTO.boardSeq}" class="btn btn-primary" style="float:right">수정</a>
+            	<a onclick="javascript:deleteBoard(${boardDTO.boardSeq})" class="btn btn-primary" style="float:right">삭제</a> 
             </c:if>
             <a href="javascript:history.go(-1)" class="btn btn-primary" style="float:right">뒤로가기</a>
             
