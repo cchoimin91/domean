@@ -1,6 +1,8 @@
 package domean.board.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import domean.board.model.BoardDTO;
 import domean.board.service.BoardService;
@@ -52,7 +55,7 @@ public class BoardController {
 		searchVO.PageCalculate(boardService.totalCountBoard(searchVO)); 
 		List<BoardDTO> boardList = boardService.listBoard(searchVO);
 		
-		modelMap.addAttribute("memberDTO", memberDTO);
+		//modelMap.addAttribute("memberDTO", memberDTO);
 		modelMap.addAttribute("searchVO", searchVO);
 		modelMap.addAttribute("boardList", boardList);
 		return "board/boardList";
@@ -188,6 +191,50 @@ public class BoardController {
 			Authentication authentication) throws Exception {
 		boardService.insertBoardDummy();
 		return "redirect:/member/board/list";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@RequestMapping(value = "member/board/list2")
+	public String boardList2(SearchVO searchVO, ModelMap modelMap, Authentication authentication, HttpServletRequest request) throws Exception {
+		
+		/*searchVO.PageCalculate(boardService.totalCountBoard(searchVO)); 
+		List<BoardDTO> boardList = boardService.listBoard(searchVO);
+		
+		modelMap.addAttribute("searchVO", searchVO);
+		modelMap.addAttribute("boardList", boardList);*/
+		
+		return "board/boardList2";
+	}
+	
+	
+	
+	@RequestMapping(value = "member/board/list.json")
+	@ResponseBody
+	public Map<String, Object> boardListJson(SearchVO searchVO, ModelMap modelMap, HttpServletRequest request) throws Exception {
+		
+		searchVO.PageCalculate(boardService.totalCountBoard(searchVO)); 
+		List<BoardDTO> boardList = boardService.listBoard(searchVO);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("searchVO", searchVO);
+ 		map.put("boardList", boardList);
+		
+		return map;
 	}
 	
 	

@@ -108,7 +108,7 @@ public class BoardServiceImple implements BoardService{
 		dummy.setBoardTitle("sdfsdfsdf");
 		dummy.setBoardWriterSeq("9");
 		dummy.setBoardUpdateMemberSeq("9");
-		for(int i=0; i<=100000;i++) {
+		for(int i=0; i<=30000;i++) {
 			boardDAO.insertBoard(dummy);
 		}
 	}
