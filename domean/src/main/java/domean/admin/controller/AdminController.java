@@ -16,7 +16,7 @@ import domean.member.controller.MemberController;
 public class AdminController {
 	
 	private static Logger logger = Logger.getLogger(AdminController.class.getName());
-
+	//ddddddd
 	
 	@RequestMapping("admin/main")
 	public String adminMain(HttpServletRequest request, HttpServletResponse response,ModelMap model)
