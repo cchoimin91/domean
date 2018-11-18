@@ -8,9 +8,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<insert id="insertBoard" parameterType="domean.board.model.BoardDTO">
 		<selectKey order="BEFORE" keyProperty="boardSeq" resultType="String">
-			SELECT IFNULL( MAX(BOARD_SEQ)+1, 1) FROM BOARD
+			SELECT IFNULL( MAX(BOARD_SEQ)+1, 1) FROM TB_BOARD
 		</selectKey> 
-		INSERT INTO BOARD(BOARD_TITLE, BOARD_CONTENT, BOARD_WRITERSEQ, BOARD_WRITE_DATE, BOARD_UPDATE_DATE, BOARD_UPDATE_MEMBERSEQ, BOARD_DELETEFLAG)
+		INSERT INTO TB_BOARD(BOARD_TITLE, BOARD_CONTENT, BOARD_WRITERSEQ, BOARD_WRITE_DATE, BOARD_UPDATE_DATE, BOARD_UPDATE_MEMBERSEQ, BOARD_DELETEFLAG)
 		
 		VALUES(#{boardTitle}, #{boardContent}, #{boardWriterSeq}, DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s')
 				, #{boardUpdateMemberSeq}, 'N')
@@ -20,19 +20,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- <selectKey order="BEFORE" keyProperty="fileSeq" resultType="String">
 			SELECT IFNULL( MAX(FILE_SEQ)+1, 1) FROM FILE
 		</selectKey> -->
-		INSERT INTO FILE(FILE_BOARDSEQ, FILE_ORIGINAL_NAME, FILE_NAME, FILE_SIZE, FILE_DELETEFLAG)
+		INSERT INTO TB_FILE(FILE_BOARDSEQ, FILE_ORIGINAL_NAME, FILE_NAME, FILE_SIZE, FILE_DELETEFLAG)
 		
 		VALUES(#{parentPK}, #{fileOriginalName}, #{fileName},#{fileSize}, 'N')
 	</insert>
 	
 	<update id="updateBoard" parameterType="domean.board.model.BoardDTO">
-		UPDATE BOARD SET BOARD_TITLE = #{boardTitle}, BOARD_CONTENT = #{boardContent}, BOARD_UPDATE_DATE = DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s'), BOARD_UPDATE_MEMBERSEQ = #{memberSeq}
+		UPDATE TB_BOARD SET BOARD_TITLE = #{boardTitle}, BOARD_CONTENT = #{boardContent}, BOARD_UPDATE_DATE = DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s'), BOARD_UPDATE_MEMBERSEQ = #{memberSeq}
 		WHERE BOARD_SEQ = #{boardSeq}
 	</update>
 	
 	<select id="totalCountBoard" parameterType="domean.common.SearchVO"  resultType="Integer">
 		SELECT COUNT(*) 
-		FROM BOARD B
+		FROM TB_BOARD B
 		<include refid="includBoardList"/>
 	</select>
 	
@@ -45,7 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 						FROM(
 		    					SELECT BOARD_SEQ, BOARD_TITLE, BOARD_CONTENT, BOARD_WRITERSEQ, BOARD_WRITE_DATE, BOARD_UPDATE_DATE
 										, BOARD_UPDATE_MEMBERSEQ, BOARD_DELETEFLAG, M.MEMBER_NAME
-		    					FROM BOARD B
+		    					FROM TB_BOARD B
 		    					<include refid="includBoardList"/>
 		    					ORDER BY BOARD_WRITE_DATE DESC
 		  					) S1 ,(SELECT @NO := 0 ) SUB 
@@ -58,7 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<sql id="includBoardList">
-		INNER JOIN MEMBER M ON M.MEMBER_SEQ=B.BOARD_WRITERSEQ
+		INNER JOIN TB_MEMBER M ON M.MEMBER_SEQ=B.BOARD_WRITERSEQ
 		WHERE BOARD_DELETEFLAG='N'
 		<if test="searchKeyword!=null and searchKeyword!=''">
 			AND ${searchType} LIKE CONCAT('%', #{searchKeyword}, '%')
@@ -67,15 +67,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		
 	<select id="selectOneBoard" parameterType="String" resultType="domean.board.model.BoardDTO">
 		SELECT BOARD_SEQ,BOARD_TITLE,BOARD_CONTENT, BOARD_WRITERSEQ, BOARD_WRITE_DATE, BOARD_UPDATE_DATE, BOARD_UPDATE_MEMBERSEQ, BOARD_DELETEFLAG, M.MEMBER_NAME
-		FROM BOARD B
-		INNER JOIN MEMBER M ON M.MEMBER_SEQ = B.BOARD_WRITERSEQ 
+		FROM TB_BOARD B
+		INNER JOIN TB_MEMBER M ON M.MEMBER_SEQ = B.BOARD_WRITERSEQ 
 		WHERE BOARD_SEQ=#{boardSeq} AND BOARD_DELETEFLAG='N'
 	</select>
 	
 	<select id="selectAllBoardFile" parameterType="String" resultType="domean.common.FileVO">
 		SELECT FILE_SEQ, FILE_BOARDSEQ, FILE_ORIGINAL_NAME, FILE_NAME,FILE_SIZE, FILE_DELETEFLAG 
-		FROM FILE
+		FROM TB_FILE
 		WHERE FILE_BOARDSEQ=#{boardSeq} AND FILE_DELETEFLAG='N'
 	</select>
+	
+	<update id="deleteBoard" parameterType="String">
+		UPDATE TB_BOARD 
+		SET BOARD_DELETEFLAG='Y' 
+		WHERE BOARD_SEQ=#{boardSeq}
+	</update>
 	
 </mapper>

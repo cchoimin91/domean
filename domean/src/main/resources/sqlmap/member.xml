@@ -8,14 +8,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="selectMemberBasicInfo" resultType="domean.member.model.MemberDTO"  parameterType="String">
   	   SELECT MEMBER_SEQ, MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_DELETEFLAG
-  	   FROM MEMBER 
+  	   FROM TB_MEMBER 
        WHERE MEMBER_ID=#{memberId} 
     </select>
 
     
     <select id="selectAllMemberAuthority" resultType="domean.member.model.RoleDTO" parameterType="String">
     	SELECT MEMBER_AUTHORITY
-		FROM MEMBER_AUTH
+		FROM TB_MEMBER_AUTH
 		WHERE MEMBER_SEQ=#{memberSeq}
     </select>
 
@@ -25,21 +25,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     		SELECT IFNULL( MAX(MEMBER_SEQ)+1, 1) FROM MEMBER
     	</selectKey> -->
 		INSERT INTO 
-		MEMBER(MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_DELETEFLAG) 
+		TB_MEMBER(MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_DELETEFLAG) 
 		VALUES(#{memberId}, #{memberPw}, #{memberName}, 'N')
 	</insert>
 	
 	
 	<select id="selectOneMemberSeq" resultType="String"  parameterType="domean.member.model.MemberDTO">
   	   SELECT MEMBER_SEQ
-  	   FROM MEMBER 
+  	   FROM TB_MEMBER 
        WHERE MEMBER_ID=#{memberId} 
     </select>
 	
 	
 	<insert id="insertJoinMemberAuth" parameterType="INTEGER" >
 		INSERT INTO 
-		MEMBER_AUTH(MEMBER_SEQ,MEMBER_AUTHORITY) 
+		TB_MEMBER_AUTH(MEMBER_SEQ,MEMBER_AUTHORITY) 
 		VALUES(#{memberSeq},'ROLE_USER')
 	</insert>
     

@@ -99,4 +99,15 @@ public class BoardDAO {
 		sqlSession.update("updateBoard", boardDTO);
 	}
 	
+	
+	
+	/**
+	 * 게시물을 삭제합니다.
+	 * @param boardSeq
+	 * @throws SQLException
+	 */
+	public void deleteBoard(String boardSeq) throws SQLException{
+		sqlSession.update("deleteBoard", boardSeq);
+	}
+	
 }

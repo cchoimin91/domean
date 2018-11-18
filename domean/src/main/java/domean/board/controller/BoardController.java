@@ -1,10 +1,12 @@
 package domean.board.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import domean.board.model.BoardDTO;
@@ -22,6 +25,7 @@ import domean.common.FileVO;
 import domean.common.SearchVO;
 import domean.member.model.MemberDTO;
 
+@RequestMapping(value="/member/board")
 @Controller
 public class BoardController {
 	
@@ -33,7 +37,7 @@ public class BoardController {
 	 * 게시물 등록 폼으로 이동합니다.
 	 * @return
 	 */
-	@RequestMapping(value = "member/board/create" , method = RequestMethod.GET )
+	@RequestMapping(value = "/create" , method = RequestMethod.GET )
 	public String boardWriteView() {
 		return "board/boardForm";
 	}
@@ -47,7 +51,7 @@ public class BoardController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "member/board/list")
+	@RequestMapping(value = "/list")
 	public String boardList(SearchVO searchVO, ModelMap modelMap, Authentication authentication, HttpServletRequest request) throws Exception {
 		
 		MemberDTO memberDTO = (MemberDTO)authentication.getPrincipal();
@@ -72,7 +76,7 @@ public class BoardController {
 	 * @return 리스트페이지
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "member/board/create", method = RequestMethod.POST)
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	public String boardInsert(HttpServletRequest request, ModelMap modelMap, @ModelAttribute BoardDTO boardDTO, Authentication authentication) throws Exception {
 		
 		MemberDTO memberDTO = (MemberDTO) authentication.getPrincipal();
@@ -90,7 +94,7 @@ public class BoardController {
 	 * @return 리스트페이지
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "member/board/update", method = RequestMethod.PATCH)
+	@RequestMapping(value = "/update", method = RequestMethod.PATCH)
 	public String boardUpdate(HttpServletRequest request, @ModelAttribute BoardDTO boardDTO, Authentication authentication) throws Exception {
 		
 		MemberDTO memberDTO = (MemberDTO) authentication.getPrincipal();
@@ -115,7 +119,7 @@ public class BoardController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "member/board/view/{boardSeq}", method = RequestMethod.GET)
+	@RequestMapping(value = "/view/{boardSeq}", method = RequestMethod.GET)
 	public String boardView(HttpServletRequest request, ModelMap modelMap, Authentication authentication, @PathVariable("boardSeq") String boardSeq) throws Exception {
 		
 		MemberDTO memberDTO = (MemberDTO)authentication.getPrincipal();
@@ -140,7 +144,7 @@ public class BoardController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value="member/board/update/{boardSeq}", method = RequestMethod.GET)
+	@RequestMapping(value="/update/{boardSeq}", method = RequestMethod.GET)
 	public String boardUpdateForm(HttpServletRequest request, Authentication authentication, @PathVariable("boardSeq") String boardSeq, ModelMap modelMap) throws Exception {
 		
 		MemberDTO memberDTO = (MemberDTO)authentication.getPrincipal();
@@ -166,12 +170,27 @@ public class BoardController {
 	 * @param boardSeq
 	 * @param authentication
 	 * @return
+	 * @throws Exception 
 	 */
-	@RequestMapping(value="member/board/delete", method= RequestMethod.DELETE)
-	public String boardDelete(HttpServletRequest request, @PathVariable("boardSeq") String boardSeq, Authentication authentication) {
+	@ResponseBody
+	@RequestMapping(value="/delete", method= RequestMethod.DELETE)
+	public String boardDelete(HttpServletRequest request, HttpServletResponse response, Authentication authentication , @RequestParam String boardSeq) throws Exception {
 		
+		MemberDTO memberDTO = (MemberDTO)authentication.getPrincipal();
 		
-		return "redirect:board/boardList";
+		String url;
+		
+		BoardDTO boardDTO = boardService.selectOneBoard(boardSeq);
+		
+		if(!memberDTO.getMemberSeq().equals(boardDTO.getBoardWriterSeq())) {
+			url= "etc/accessDenied";
+		}else {
+			boardService.deleteBoard(boardSeq);
+			url ="/member/board/list";
+		}
+		
+		return url;
+		
 	}
 	
 
@@ -186,55 +205,13 @@ public class BoardController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "member/board/insertInfi", method = RequestMethod.GET)
+	@RequestMapping(value = "/insertInfi", method = RequestMethod.GET)
 	public String boardInsertDummy(HttpServletRequest request, ModelMap modelMap, @ModelAttribute BoardDTO boardDTO,
 			Authentication authentication) throws Exception {
+		
 		boardService.insertBoardDummy();
 		return "redirect:/member/board/list";
-	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	@RequestMapping(value = "member/board/list2")
-	public String boardList2(SearchVO searchVO, ModelMap modelMap, Authentication authentication, HttpServletRequest request) throws Exception {
-		
-		/*searchVO.PageCalculate(boardService.totalCountBoard(searchVO)); 
-		List<BoardDTO> boardList = boardService.listBoard(searchVO);
-		
-		modelMap.addAttribute("searchVO", searchVO);
-		modelMap.addAttribute("boardList", boardList);*/
-		
-		return "board/boardList2";
-	}
-	
-	
-	
-	@RequestMapping(value = "member/board/list.json")
-	@ResponseBody
-	public Map<String, Object> boardListJson(SearchVO searchVO, ModelMap modelMap, HttpServletRequest request) throws Exception {
-		
-		searchVO.PageCalculate(boardService.totalCountBoard(searchVO)); 
-		List<BoardDTO> boardList = boardService.listBoard(searchVO);
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("searchVO", searchVO);
- 		map.put("boardList", boardList);
-		
-		return map;
 	}
 	
 	

@@ -36,7 +36,17 @@
 		
 		function deleteBoard(boardSeq){
 			if(confirm('정말 삭제하시겠습니까?')){
-				window.location.href='/member/board/delete?boardSeq='+boardSeq;
+				
+				$.ajax({
+			        url : "/member/board/delete",
+			        type : "DELETE",
+			        cache : false,
+			        data : {
+			                 "boardSeq":boardSeq
+			               }
+			        }).done(function(result) {
+			        	 window.location.href = result;
+			           });
 			}
 		}
 	</script>
