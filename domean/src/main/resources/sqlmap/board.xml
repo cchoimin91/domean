@@ -31,13 +31,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	
 	<select id="totalCountBoard" parameterType="domean.common.SearchVO"  resultType="Integer">
-		SELECT COUNT(*) 
+		SELECT COUNT(*)  
 		FROM TB_BOARD B
 		<include refid="includBoardList"/>
 	</select>
 	
 	<select id="listBoard" parameterType="domean.common.SearchVO" resultType="domean.board.model.BoardDTO">
-		SELECT S2.ROWNUM, S2.BOARD_SEQ, S2.BOARD_TITLE, S2.MEMBER_NAME, DATE_FORMAT(S2.BOARD_WRITE_DATE, '%Y.%m.%d %H:%i:%s') BOARD_WRITE_DATE
+		SELECT S2.ROWNUM, S2.BOARD_SEQ, S2.BOARD_TITLE, S2.MEMBER_NAME, DATE_FORMAT(S2.BOARD_WRITE_DATE, '%Y-%m-%d %H:%i:%s') BOARD_WRITE_DATE
 		 FROM(
 				SELECT *
 				FROM (

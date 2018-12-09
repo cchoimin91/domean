@@ -1,9 +1,6 @@
 package domean.board.controller;
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -54,14 +51,12 @@ public class BoardController {
 	@RequestMapping(value = "/list")
 	public String boardList(SearchVO searchVO, ModelMap modelMap, Authentication authentication, HttpServletRequest request) throws Exception {
 		
-		MemberDTO memberDTO = (MemberDTO)authentication.getPrincipal();
-		
 		searchVO.PageCalculate(boardService.totalCountBoard(searchVO)); 
 		List<BoardDTO> boardList = boardService.listBoard(searchVO);
 		
-		//modelMap.addAttribute("memberDTO", memberDTO);
 		modelMap.addAttribute("searchVO", searchVO);
 		modelMap.addAttribute("boardList", boardList);
+		
 		return "board/boardList";
 	}
 	
@@ -176,7 +171,7 @@ public class BoardController {
 	@RequestMapping(value="/delete", method= RequestMethod.DELETE)
 	public String boardDelete(HttpServletRequest request, HttpServletResponse response, Authentication authentication , @RequestParam String boardSeq) throws Exception {
 		
-		MemberDTO memberDTO = (MemberDTO)authentication.getPrincipal();
+		MemberDTO memberDTO = (MemberDTO)authentication.getPrincipal(); 
 		
 		String url;
 		

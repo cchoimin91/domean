@@ -78,7 +78,7 @@ public class BoardServiceImple implements BoardService{
 	
 	@Override
 	public void deleteBoard(String boardSeq) throws SQLException {
-		boardDAO.deleteBoard(boardSeq);
+		boardDAO.deleteBoard(boardSeq); 
 	}
 
 	
@@ -94,7 +94,6 @@ public class BoardServiceImple implements BoardService{
 	
 	@Override
 	public List<BoardDTO> updateViewBoard() throws SQLException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

@@ -20,11 +20,13 @@ public class CsrfSecurityRequestMatcher implements RequestMatcher{
 	
 	@Override
 	public boolean matches(HttpServletRequest request) {
+		
 		if(allowRequestMethod.matcher(request.getMethod()).matches()) {
 			return false;
 		}
-		System.out.println("@@@@"+ !unprotectedMatcher.matches(request));
+		
 		return !unprotectedMatcher.matches(request);
+	
 	}
 
 }//CLASS END

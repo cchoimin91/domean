@@ -42,7 +42,7 @@ public interface BoardService {
 	 * 게시물 삭제
 	 * @param boardSeq
 	 * @throws Exception
-	 */
+	 */ 
 	public void deleteBoard(String boardSeq)  throws Exception;
 	
 	
