@@ -4,7 +4,7 @@
 <html>
 <head>
 
-    <title>domean</title>
+    <title>domean 업데이트메소드~</title>
 
     <link href="/resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/resources/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
