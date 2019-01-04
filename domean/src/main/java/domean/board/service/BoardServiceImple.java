@@ -2,6 +2,8 @@ package domean.board.service;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,10 +54,10 @@ public class BoardServiceImple implements BoardService{
 	}
 
 	
-	
+
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public void updateBoard(BoardDTO boardDTO, String memberSeq) throws Exception {
+	public void updateBoard(BoardDTO boardDTO,String[] fileSeqs, String memberSeq) throws Exception {
 		
 		boardDTO.setBoardUpdateMemberSeq(memberSeq);
 		boardDAO.updateBoard(boardDTO);
@@ -64,12 +66,19 @@ public class BoardServiceImple implements BoardService{
 		
 		if(boardDTO.getUploadFile()!=null) {
 			fileList = new FileUpload().SaveAllFiles(boardDTO.getUploadFile());
+			
+			for (Integer i=0; i<fileList.size();i++) {					
+				FileVO fileVO = fileList.get(i);
+				fileVO.setParentPK(boardDTO.getBoardSeq());
+				boardDAO.insertBoardFile(fileVO);
+			}
 		}
 		
-		for (Integer i=0; i<fileList.size();i++) {					
-			FileVO fileVO = fileList.get(i);
-			fileVO.setParentPK(boardDTO.getBoardSeq());
-			boardDAO.insertBoardFile(fileVO);
+		if(fileSeqs!=null) {
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			List<String> list = new ArrayList<String>(Arrays.asList(fileSeqs));
+			map.put("fileSeqs", list);
+			boardDAO.deleteFiles(map);
 		}
 		
 	}

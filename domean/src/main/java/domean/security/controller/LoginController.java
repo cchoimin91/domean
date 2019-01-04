@@ -20,7 +20,7 @@ public class LoginController {
 
 	
 	
-	@RequestMapping(value = "index")
+	@RequestMapping(value = "/index")
 	public String index(HttpServletRequest request, ModelMap modelMap) {
 		
 		Map<String, ?> redirectMap = RequestContextUtils.getInputFlashMap(request);
@@ -31,7 +31,6 @@ public class LoginController {
 			msg = (String) redirectMap.get("result");
 		}
 		
-		
 		modelMap.addAttribute("msg", msg);
 		return "etc/index";
 	}
@@ -39,18 +38,20 @@ public class LoginController {
 	
 	
 	
-	@RequestMapping(value = "login")
+	@RequestMapping(value = "/login")
 	public String login(HttpServletRequest request, ModelMap modelMap) {
 		System.out.println("@ login");
 
 		return "etc/login";
 	}
+	
+	
 
 	
 	
 	
 	
-	@RequestMapping(value = "accessdenied")
+	@RequestMapping(value = "/accessdenied")
 	public String accessDenied(HttpServletRequest request, ModelMap modelMap) {
 		System.out.println("@ accessDenied");
 		

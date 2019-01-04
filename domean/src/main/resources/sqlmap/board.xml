@@ -26,7 +26,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	
 	<update id="updateBoard" parameterType="domean.board.model.BoardDTO">
-		UPDATE TB_BOARD SET BOARD_TITLE = #{boardTitle}, BOARD_CONTENT = #{boardContent}, BOARD_UPDATE_DATE = DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s'), BOARD_UPDATE_MEMBERSEQ = #{memberSeq}
+		UPDATE TB_BOARD 
+		SET BOARD_TITLE = #{boardTitle}, BOARD_CONTENT = #{boardContent}, BOARD_UPDATE_DATE = DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s'), BOARD_UPDATE_MEMBERSEQ = #{boardUpdateMemberSeq}
 		WHERE BOARD_SEQ = #{boardSeq}
 	</update>
 	
@@ -83,5 +84,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SET BOARD_DELETEFLAG='Y' 
 		WHERE BOARD_SEQ=#{boardSeq}
 	</update>
+	
+	<update id="deleteFiles" parameterType="java.util.Map">
+		UPDATE TB_FILE
+		SET FILE_DELETEFLAG='Y'
+		WHERE FILE_SEQ IN
+		<foreach collection="fileSeqs" item="seq" open="(" close=")" separator=",">
+			#{seq}
+		</foreach>
+	</update> 
+
+
 	
 </mapper>

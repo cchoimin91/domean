@@ -2,6 +2,7 @@ package domean.board.dao;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSessionException;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -108,6 +109,17 @@ public class BoardDAO {
 	 */ 
 	public void deleteBoard(String boardSeq) throws SQLException{
 		sqlSession.update("deleteBoard", boardSeq);
+	}
+	
+	
+	
+	/**
+	 * 파일을 삭제 합니다 
+	 * @param fileSeqs 삭제 할 파일seq들
+	 * @throws SQLException
+	 */
+	public void deleteFiles(Map<String, Object> fileSeqs) throws SQLException{
+		sqlSession.update("deleteFiles", fileSeqs);
 	}
 	
 }
