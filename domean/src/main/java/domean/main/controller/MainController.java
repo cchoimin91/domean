@@ -22,14 +22,16 @@ public class MainController {
 	
 	
 	@RequestMapping("member/main") 
-	public String domeanMain(HttpServletRequest request,ModelMap modelMap,Authentication authentication)  
-	{			
+	public String domeanMain(HttpServletRequest request,ModelMap modelMap,Authentication authentication)  {			
 		System.out.println("@ domeanMain");
 		
 		MemberDTO userInfo = (MemberDTO)authentication.getPrincipal(); // @AuthenticationPrincipal
 		modelMap.addAttribute("userInfo",userInfo);
+
 		return "main/main";
+	
 	}
+	
 	
 	
 	

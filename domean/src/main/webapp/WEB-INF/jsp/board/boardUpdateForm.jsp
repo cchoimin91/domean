@@ -1,10 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %> 
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <html>
 <head>
 
-    <title>domean 업데이트메소드~</title>
+    <title>domean</title>
 
     <link href="/resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/resources/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
@@ -69,7 +70,6 @@
             
             <form id="f1" name="f1" action="/member/board/update" enctype="multipart/form-data" method="post">
             	<input type="hidden" name="boardSeq" value="${boardDTO.boardSeq}">
-            	<input type="hidden" name="_method" value="PATCH"> 
             	
 	           	<div class="form-group">
 	            	<label>글제목</label>
@@ -90,17 +90,17 @@
 					</select>
 					<div id="fileListDiv" class="fileListDiv">
 						<c:if test="${fileList.size()>0}">
+						<div> 삭제 할 파일 선택</div>
 							<c:forEach var="fileList" items="${fileList}">
-								<input type="checkbox" id="checkRow" name="checkRow" value="<c:out value="${filelist.seq}"/>" />
-								<a href="downloadFile?fileName=<c:out value="${filelist.fileName}"/>&fileOriginalName=<c:out value="${filelist.fileOriginalName}"/>">
-									<c:out value="${filelist.fileOriginalName}"/>
+								<input type="checkbox" id="fileSeq" name="fileSeq" value="<c:out value="${fileList.fileSeq}"/>" />
+								<a href="/downloadFile?fileName=<c:out value="${fileList.fileName}"/>&originalName=<c:out value="${fileList.fileOriginalName}"/>">
+									<c:out value="${fileList.fileOriginalName}"/>
 								</a>
+								<br>
 							</c:forEach>
 						</c:if>
-						
 						<input type="file" id="uploadFile" name="uploadFile" multiple onchange="fileChange(this)"/> 
 					</div>
-					
 				</div>
 			</form>
 			<a href="#" onclick="contentInsert()" class="btn btn-primary btn-lg btn-block">글수정</a>

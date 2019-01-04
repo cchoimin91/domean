@@ -76,34 +76,11 @@ public class BoardController {
 		
 		MemberDTO memberDTO = (MemberDTO) authentication.getPrincipal();
 		boardService.insertBoard(boardDTO, memberDTO.getMemberSeq());
+		
 		return "redirect:/member/board/list";
-	
 	}
 	
-	
-	/**
-	 * 게시물을 수정합니다.
-	 * @param request
-	 * @param boardDTO
-	 * @param authentication
-	 * @return 리스트페이지
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/update", method = RequestMethod.PATCH)
-	public String boardUpdate(HttpServletRequest request, @ModelAttribute BoardDTO boardDTO, Authentication authentication) throws Exception {
-		
-		MemberDTO memberDTO = (MemberDTO) authentication.getPrincipal();
-		
-		if(!memberDTO.getMemberSeq().equals(boardDTO.getBoardWriterSeq())) {
-			return "etc/accessDenied";
-		}
-		
-		boardService.updateBoard(boardDTO, memberDTO.getMemberSeq());
 
-		return "redirect:/member/board/list";
-	}
-	
-	
 	
 	/**
 	 * 게시물 1건을 조회합니다.
@@ -158,6 +135,34 @@ public class BoardController {
 	}
 	
 	
+
+	/**
+	 * 게시물을 수정합니다.
+	 * @param request
+	 * @param boardDTO
+	 * @param authentication
+	 * @return 리스트페이지
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public String boardUpdate(HttpServletRequest request, @ModelAttribute BoardDTO boardDTO, Authentication authentication) throws Exception {
+		
+		String[] deleteFileSeqs = request.getParameterValues("fileSeq");
+		
+		MemberDTO memberDTO = (MemberDTO) authentication.getPrincipal();
+		
+		BoardDTO boardInfo = boardService.selectOneBoard(boardDTO.getBoardSeq());
+		
+		if(!memberDTO.getMemberSeq().equals(boardInfo.getBoardWriterSeq())) {
+			return "etc/accessDenied";
+		}
+		
+		boardService.updateBoard(boardDTO, deleteFileSeqs, memberDTO.getMemberSeq());
+
+		return "redirect:/member/board/list";
+	}
+	
+	
 	
 	/**
 	 * 게시글을 삭제 합니다. 
@@ -185,11 +190,9 @@ public class BoardController {
 		}
 		
 		return url;
-		
 	}
 	
 
-	
 	
 	/**
 	 * 게시판에 더미데이터 넣기
@@ -205,8 +208,8 @@ public class BoardController {
 			Authentication authentication) throws Exception {
 		
 		boardService.insertBoardDummy();
+		
 		return "redirect:/member/board/list";
-	
 	}
 	
 	

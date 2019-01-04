@@ -30,11 +30,12 @@ public interface BoardService {
 	
 	/**
 	 * 게시물 수정
-	 * @param boardDTO
-	 * @param memberSeq
+	 * @param boardDTO 게시물 정보
+	 * @param fileSeq 삭제 할 파일 Seq
+	 * @param memberSeq 게시물 수정자 Seq
 	 * @throws Exception
 	 */
-	public void updateBoard(BoardDTO boardDTO, String memberSeq)  throws Exception;
+	public void updateBoard(BoardDTO boardDTO, String[] fileSeq, String memberSeq) throws Exception;
 	
 	
 	
