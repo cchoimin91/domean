@@ -40,8 +40,6 @@ public class LoginController {
 	
 	@RequestMapping(value = "/login")
 	public String login(HttpServletRequest request, ModelMap modelMap) {
-		System.out.println("@ login");
-
 		return "etc/login";
 	}
 	
@@ -54,7 +52,6 @@ public class LoginController {
 	@RequestMapping(value = "/accessdenied")
 	public String accessDenied(HttpServletRequest request, ModelMap modelMap) {
 		System.out.println("@ accessDenied");
-		
 		return "etc/accessDenied";
 	}
 
