@@ -62,7 +62,7 @@ public class FileUpload {
 	 * @throws Exception 오류발생 처리
 	 */
 	public FileVO SaveOneFile(MultipartFile upfile, String type) throws Exception {
-		String filePath = PropertiesUtil.getOption("domean", "upload.file");
+		String filePath = PropertiesUtil.getOption("domean", "UPLOAD.FILE");
 		String newFileName = getNewName();
 		
 		saveFile(upfile, filePath+"/"+DateUtil.getCurrentTime("yyyy")+"/", newFileName);
@@ -86,7 +86,7 @@ public class FileUpload {
 	 * @throws Exception 오류발생 처리
 	 */
 	public List<FileVO> SaveAllFiles(List<MultipartFile> upfiles) throws Exception {
-		String filePath = PropertiesUtil.getOption("domean", "upload.file");
+		String filePath = PropertiesUtil.getOption("domean", "UPLOAD.FILE");
 		List<FileVO> filelist = new ArrayList<FileVO>();
 
 		for(MultipartFile uploadfile : upfiles ){			

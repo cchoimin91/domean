@@ -23,12 +23,12 @@ public class FileDownload{
 
 	@RequestMapping(value = "downloadFile")
 	public void execDownloadFile(HttpServletRequest request,HttpServletResponse response) throws Exception {
-		filedownload( PropertiesUtil.getOption("domean", "upload.image"), request, response );
+		filedownload( PropertiesUtil.getOption("domean", "UPLOAD.IMAGE"), request, response );
 	}
 	
 	@RequestMapping(value = "downloadPhoto")
 	public void downloadPhoto(HttpServletRequest request,HttpServletResponse response) throws Exception {
-		filedownload( PropertiesUtil.getOption("domean", "upload.image"), request, response );
+		filedownload( PropertiesUtil.getOption("domean", "UPLOAD.IMAGE"), request, response );
 	}
 	
 	/**
@@ -62,7 +62,7 @@ public class FileDownload{
 		// 파일명 지정
         response.setHeader("Content-Disposition", "attachment; fileName=\""+originalName+"\"");
         response.setContentType("application/octet-stream;");
-        //response.setHeader("Content-Transfer-Encoding", "binary;");
+        response.setHeader("Content-Transfer-Encoding", "binary;");
 
         OutputStream os = response.getOutputStream();
         FileInputStream fis = new FileInputStream(realPath);
@@ -77,7 +77,6 @@ public class FileDownload{
 
         fis.close();
         os.close();
-
 	}
 	
 }
